@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root">not rendered</div>
+  <div id="inside">not rendered</div>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script>
+    const Inside = ({ q }) => {
+      return React.createElement("div", { style: { 'fontSize': '3em', "zIndex": "1000" } }, 'Inside ', React.createElement('i', {}, q), ' outside')
+    }
+
+
+    const App = () => {
+      return React.createElement(
+        "div",
+        {},
+        React.createElement("h1", { id: 'any' }, 'Adopt me')
+      );
+    };
+
+    const container = document.getElementById("root");
+    const root = ReactDOM.createRoot(container);
+    root.render(React.createElement(App));
+    const container2 = document.getElementById("inside");
+    const root2 = ReactDOM.createRoot(container2);
+    root2.render(React.createElement(Inside, { q: "or" }));  
+  </script>
+</body>
+
+</html>
