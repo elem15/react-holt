@@ -11,30 +11,9 @@
 
 <body>
   <div id="root">not rendered</div>
-  <div id="inside">not rendered</div>
   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-  <script>
-    const Inside = ({ q }) => {
-      return React.createElement("div", { style: { 'fontSize': '3em', "zIndex": "1000" } }, 'Inside ', React.createElement('i', {}, q), ' outside')
-    }
-
-
-    const App = () => {
-      return React.createElement(
-        "div",
-        {},
-        React.createElement("h1", { id: 'any' }, 'Adopt me')
-      );
-    };
-
-    const container = document.getElementById("root");
-    const root = ReactDOM.createRoot(container);
-    root.render(React.createElement(App));
-    const container2 = document.getElementById("inside");
-    const root2 = ReactDOM.createRoot(container2);
-    root2.render(React.createElement(Inside, { q: "or" }));  
-  </script>
+  <script src="App.js"></script>
 </body>
 
 </html>
