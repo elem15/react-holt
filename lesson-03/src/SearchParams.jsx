@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 const SearchParams = ({ counter }) => {
   const [location, setLocation] = useState("Seattle, WA");
-
+  const unControl = useRef()
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(location)
+    console.log(unControl.current.value)
+    console.log(e.target.email.value)
+  }
   return (
     <div className="search-params">
       <div>{counter}</div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="location">
           Location
           <input
@@ -18,6 +24,15 @@ const SearchParams = ({ counter }) => {
             }}
           />
         </label>
+        <label >
+          Uncontrolled
+          <input type="text" ref={unControl} />
+        </label>
+        <label >
+          Uncontrolled++
+          <input type="text" name='email' />
+        </label>
+        <button>Submit</button>
       </form>
     </div>
   );
