@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import Pet from './Pet';
+import useBreeds from './useBreeds';
 const animals = ['cat', 'dog', 'bird', 'reptile', 'pig']
-const breeds = {
-  cat: ['maine-coon', 'persian'],
-  dog: ['sheep-dog', 'pudel', 'Havanese', 'Dalmation', 'Labrador']
-}
+
 const SearchParams = ({ counter }) => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState('')
   const [breed, setBreed] = useState('')
-  const [currentBreeds, setCurrentBreeds] = useState([])
+  const [currentBreeds] = useBreeds(animal)
   const [pets, setPets] = useState([])
   const unControl = useRef()
   useEffect(() => {
@@ -61,7 +59,6 @@ const SearchParams = ({ counter }) => {
             onChange={(e) => {
               setAnimal(e.target.value)
               setBreed('')
-              setCurrentBreeds(breeds[e.target.value] ? breeds[e.target.value] : [])
             }}
             onBlur={(e) => setAnimal(e.target.value)}
           >
