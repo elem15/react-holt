@@ -1,6 +1,14 @@
 import { useRef, useState } from "react";
+const animals = ['cat', 'dog', 'bird', 'reptiles', 'pig']
+const breeds = {
+  cat: ['maine-coon', 'persian'],
+  dog: ['sheep-dog', 'pudel']
+}
 const SearchParams = ({ counter }) => {
   const [location, setLocation] = useState("Seattle, WA");
+  const [animal, setAnimal] = useState('')
+  const [breed, setBreed] = useState('')
+  const [currentBreeds, setCurrentBreeds] = useState([])
   const unControl = useRef()
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -31,6 +39,32 @@ const SearchParams = ({ counter }) => {
         <label >
           Uncontrolled++
           <input type="text" name='email' />
+        </label>
+        <label>
+          Animals
+          <select name="animals" value={animal}
+            onChange={(e) => {
+              setAnimal(e.target.value)
+              setBreed('')
+              setCurrentBreeds(breeds[e.target.value] ? breeds[e.target.value] : [])
+            }}
+            onBlur={(e) => setAnimal(e.target.value)}
+          >
+            <option value=""></option>
+            {animals.map(animal => (
+              <option name={animal} key={animal}>{animal}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Breed
+          <select name="breeds" value={breed} disabled={!currentBreeds.length} onChange={e => setBreed(e.target.value)}
+          >
+            <option></option>
+            {currentBreeds.map(breed => (
+              <option name={breed} key={breed}>{breed}</option>
+            ))}
+          </select>
         </label>
         <button>Submit</button>
       </form>
