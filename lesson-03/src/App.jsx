@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
-import Details from './Details';
+import Details from './components/Details';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient({
@@ -12,7 +12,7 @@ const queryClient = new QueryClient({
     }
   }
 });
-import SearchParams from "./SearchParams";
+import SearchParams from "./components/SearchParams";
 const App = () => {
   return (
     <BrowserRouter>

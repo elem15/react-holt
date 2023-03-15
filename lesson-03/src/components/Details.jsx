@@ -1,11 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import fetchPet from './fetchPet';
+import fetchPet from '../queries/fetchPet';
 
 const Details = () => {
   const { id } = useParams();
   const result = useQuery(['details', id], fetchPet);
 
+  if (result.isError) {
+    return (
+      <div className="error">Some loading error</div>
+    );
+  }
   if (result.isLoading) {
     return (
       <div className="loading-pane">
