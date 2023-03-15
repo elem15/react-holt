@@ -1,15 +1,15 @@
 import { useState } from "react";
-import Pets from './Pets';
+import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
-import { useQuery } from '@tanstack/react-query';
-import fetchPetsList from '../queries/fetchPetsList';
+import { useQuery } from "@tanstack/react-query";
+import fetchPetsList from "../queries/fetchPetsList";
 const animals = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = ({ counter }) => {
   const [animal, setAnimal] = useState("");
-  const [petsParams, setPetParams] = useState(['', '', '']);
+  const [petsParams, setPetParams] = useState(["", "", ""]);
   const [currentBreeds] = useBreeds(animal);
-  const result = useQuery(['pets', ...petsParams], fetchPetsList);
+  const result = useQuery(["pets", ...petsParams], fetchPetsList);
 
   const pets = result?.data?.pets ?? [];
 
@@ -17,9 +17,9 @@ const SearchParams = ({ counter }) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     setPetParams([
-      formData.get('animal') ?? '',
-      formData.get('location') ?? '',
-      formData.get('breeds') ?? ''
+      formData.get("animal") ?? "",
+      formData.get("location") ?? "",
+      formData.get("breeds") ?? "",
     ]);
   };
   return (
@@ -57,10 +57,7 @@ const SearchParams = ({ counter }) => {
         </label>
         <label>
           Breed
-          <select
-            name="breeds"
-            disabled={!currentBreeds.length}
-          >
+          <select name="breeds" disabled={!currentBreeds.length}>
             <option></option>
             {currentBreeds.map((breed) => (
               <option name={breed} key={breed}>
@@ -71,14 +68,13 @@ const SearchParams = ({ counter }) => {
         </label>
         <button>Submit</button>
       </form>
-      {pets.length ?
+      {pets.length ? (
         <Pets pets={pets} />
-        : (
-          <div className="loading-pane">
-            <h2 className="loader">🌀</h2>
-          </div>
-        )
-      }
+      ) : (
+        <div className="loading-pane">
+          <h2 className="loader">🌀</h2>
+        </div>
+      )}
     </div>
   );
 };
