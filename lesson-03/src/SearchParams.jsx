@@ -10,7 +10,6 @@ const SearchParams = ({ counter }) => {
   const [breed, setBreed] = useState("");
   const [currentBreeds] = useBreeds(animal);
   const [pets, setPets] = useState([]);
-  const unControl = useRef();
   useEffect(() => {
     requestPets();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -25,9 +24,6 @@ const SearchParams = ({ counter }) => {
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(location);
-    console.log(unControl.current.value);
-    console.log(e.target.email.value);
     requestPets();
   };
   return (
@@ -45,14 +41,6 @@ const SearchParams = ({ counter }) => {
               setLocation(e.target.value);
             }}
           />
-        </label>
-        <label>
-          Uncontrolled
-          <input type="text" ref={unControl} />
-        </label>
-        <label>
-          Uncontrolled++
-          <input type="text" name="email" />
         </label>
         <label>
           Animals

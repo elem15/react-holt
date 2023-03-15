@@ -8,7 +8,8 @@ const Pets = ({ pets }) => {
         pets.map((pet) => (
           < Pet
             {...pet} //not good idea throw all data in component
-            key={pet.id} location={`${pet.city}, ${pet.state}`} />
+            key={pet.id}
+          />
         ))
       }
     </div>
