@@ -6,9 +6,7 @@ import fetchPetsList from '../queries/fetchPetsList';
 const animals = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = ({ counter }) => {
-  const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
-  const [breed, setBreed] = useState("");
   const [petsParams, setPetParams] = useState(['', '', '']);
   const [currentBreeds] = useBreeds(animal);
   const result = useQuery(['pets', ...petsParams], fetchPetsList);
@@ -17,7 +15,12 @@ const SearchParams = ({ counter }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setPetParams([animal, location, breed]);
+    const formData = new FormData(e.target);
+    setPetParams([
+      formData.get('animal') ?? '',
+      formData.get('location') ?? '',
+      formData.get('breeds') ?? ''
+    ]);
   };
   return (
     <div className="search-params">
@@ -28,11 +31,8 @@ const SearchParams = ({ counter }) => {
           <input
             type="text"
             id="location"
-            value={location}
+            name="location"
             placeholder="Location"
-            onChange={(e) => {
-              setLocation(e.target.value);
-            }}
           />
         </label>
         <label>
@@ -42,11 +42,9 @@ const SearchParams = ({ counter }) => {
             value={animal}
             onChange={(e) => {
               setAnimal(e.target.value);
-              setBreed("");
             }}
             onBlur={(e) => {
               setAnimal(e.target.value);
-              setBreed("");
             }}
           >
             <option value=""></option>
@@ -61,9 +59,7 @@ const SearchParams = ({ counter }) => {
           Breed
           <select
             name="breeds"
-            value={breed}
             disabled={!currentBreeds.length}
-            onChange={(e) => setBreed(e.target.value)}
           >
             <option></option>
             {currentBreeds.map((breed) => (
