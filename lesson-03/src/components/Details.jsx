@@ -2,11 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import fetchPet from "../queries/fetchPet";
 import Carousel from "./Carousel";
+import ErrorBoundary from './ErrorBoundary';
 
 const Details = () => {
   const { id } = useParams();
   const result = useQuery(["details", id], fetchPet);
-
+  // these error handling don't work in this case with useQuery. Only Error boundary help!
   if (result.isError) {
     return <div className="error">Some loading error</div>;
   }
@@ -31,4 +32,12 @@ const Details = () => {
   );
 };
 
-export default Details;
+
+function DetailsErrorBoundary(props) {
+  return (
+    <ErrorBoundary>
+      <Details {...props} />
+    </ErrorBoundary>
+  );
+}
+export default DetailsErrorBoundary;
