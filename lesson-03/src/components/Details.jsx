@@ -11,8 +11,7 @@ const Details = () => {
   const result = useQuery(["details", id], fetchPet);
   const [isModal, setModalStatus] = useState(false);
   const renderModal = () => {
-    setModalStatus(true);
-    console.log('modal');
+    setModalStatus(false);
   };
   // these error handling don't work in this case with useQuery. Only Error boundary help!
   if (result.isError) {
@@ -36,9 +35,12 @@ const Details = () => {
         <p>{pet.description}</p>
       </div>
       {isModal ?
-        <Modal>
-          <h2>Modal</h2>
-          <button onClick={() => setModalStatus(false)}>close</button>
+        <Modal renderModal={renderModal}>
+          <h2>Would you like to adopt {pet.name}?</h2>
+          <div className="buttons">
+            <button>Yes</button>
+            <button onClick={() => setModalStatus(false)}>No</button>
+          </div>
         </Modal>
         : ''}
     </div>
