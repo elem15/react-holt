@@ -18,12 +18,12 @@ const Details = () => {
   };
   // these error handling don't work in this case with useQuery. Only Error boundary help!
   if (result.isError) {
-    return <div className="error">Some loading error</div>;
+    return <div className="text-red-600">Some loading error</div>;
   }
   if (result.isLoading) {
     return (
-      <div className="loading-pane">
-        <h2 className="loader">🌀</h2>
+      <div className="flex justify-center align-baseline">
+        <h2 className="animate-spin text-8xl">🌀</h2>
       </div>
     );
   }
@@ -43,7 +43,9 @@ const Details = () => {
       </div>
       {isModal ? (
         <Modal renderModal={renderModal}>
-          <h2>Would you like to adopt {pet.name}?</h2>
+          <h2 className="mb-6 text-center text-2xl">
+            Would you like to adopt {pet.name}?
+          </h2>
           <div className="buttons">
             <button onClick={adoptPet}>Yes</button>
             <button onClick={() => setModalStatus(false)}>No</button>

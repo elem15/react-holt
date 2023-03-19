@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Details from "./components/Details";
@@ -17,16 +17,15 @@ const queryClient = new QueryClient({
 const App = () => {
   const adoptPet = useState();
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <AdoptPetContext.Provider value={adoptPet}>
-          <div
-            className="m-0 p-0"
-            style={{
-              background:
-                "url(http://pets-images.dev-apis.com/pets/wallpaperB.jpg)",
-            }}
-          >
+    <div
+      className="m-0 h-full min-h-screen p-0"
+      style={{
+        background: "url(http://pets-images.dev-apis.com/pets/wallpaperB.jpg)",
+      }}
+    >
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <AdoptPetContext.Provider value={adoptPet}>
             <header className="mb-10 w-full bg-gradient-to-b from-yellow-400 via-orange-500 to-red-500 p-7 text-center">
               <Link className="text-6xl text-white hover:text-gray-200" to="/">
                 Adopt Me!
@@ -36,10 +35,10 @@ const App = () => {
               <Route path="/" element={<SearchParams />} />
               <Route path="/details/:id" element={<Details />} />
             </Routes>
-          </div>
-        </AdoptPetContext.Provider>
-      </QueryClientProvider>
-    </BrowserRouter>
+          </AdoptPetContext.Provider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </div>
   );
 };
 
