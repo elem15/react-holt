@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useDeferredValue, useMemo, useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +17,11 @@ const SearchParams = ({ counter }) => {
   const result = useQuery(["pets", petsParams], fetchPetsList);
   const [adoptedPet] = useContext(AdoptPetContext);
   const pets = result?.data?.pets ?? [];
+  const deferredPets = useDeferredValue(pets);
+  const renderedPets = useMemo(
+    () => <Pets pets={deferredPets} />,
+    [deferredPets]
+  );
   if (result.isLoading) {
     return (
       <div className="loading-pane">
@@ -85,7 +90,7 @@ const SearchParams = ({ counter }) => {
         </label>
         <button>Submit</button>
       </form>
-      <Pets pets={pets} />
+      {renderedPets}
     </div>
   );
 };
