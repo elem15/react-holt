@@ -1,8 +1,10 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { Component } from "react";
-
-class Carousel extends Component {
+interface IProps {
+  images: string[];
+}
+class Carousel extends Component<IProps> {
   state = {
     active: 0,
   };
@@ -23,7 +25,9 @@ class Carousel extends Component {
               alt="animal thumbnail"
               key={image}
               className={index === active ? "active" : ""}
-              onClick={() => { this.setState({ active: index }); }}
+              onClick={() => {
+                this.setState({ active: index });
+              }}
             />
           ))}
         </div>

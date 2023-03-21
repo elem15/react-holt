@@ -3,8 +3,8 @@
 import { useRef, useEffect, MutableRefObject, ReactElement } from "react";
 import { createPortal } from "react-dom";
 interface IProps {
-  children: ReactElement,
-  renderModal: () => void
+  children: ReactElement;
+  renderModal: () => void;
 }
 const Modal = ({ children, renderModal }: IProps) => {
   const divRef: MutableRefObject<HTMLDivElement | null> = useRef(null);
@@ -22,8 +22,8 @@ const Modal = ({ children, renderModal }: IProps) => {
     rootEl.appendChild(divRef.current);
     rootEl.addEventListener("click", () => handleClick());
     return () => {
-      if(divRef.current) rootEl.removeChild(divRef.current);
-    }
+      if (divRef.current) rootEl.removeChild(divRef.current);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return createPortal(

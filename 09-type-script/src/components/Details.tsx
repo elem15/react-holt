@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from 'react';
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import AdoptPetContext from '../AdoptPetContext';
+import AdoptPetContext from "../AdoptPetContext";
 import fetchPet from "../queries/fetchPet";
 import Carousel from "./Carousel";
-import ErrorBoundary from './ErrorBoundary';
-import Modal from './Modal';
+import ErrorBoundary from "./ErrorBoundary";
+import Modal from "./Modal";
 
 const Details = () => {
   const { id } = useParams();
+  if (!id) throw new Error("No id available");
   const result = useQuery(["details", id], fetchPet);
   const [isModal, setModalStatus] = useState(false);
   const [, setAdoptPet] = useContext(AdoptPetContext);
@@ -27,10 +28,10 @@ const Details = () => {
       </div>
     );
   }
-  const [pet] = result.data.pets;
+  const pet = result.data.pets[0];
   const adoptPet = () => {
     setAdoptPet(pet);
-    navigate('/');
+    navigate("/");
   };
   return (
     <div className="details">
@@ -41,24 +42,27 @@ const Details = () => {
         <button onClick={() => setModalStatus(true)}>Adopt {pet.name}</button>
         <p>{pet.description}</p>
       </div>
-      {isModal ?
+      {isModal ? (
         <Modal renderModal={renderModal}>
-          <h2>Would you like to adopt {pet.name}?</h2>
-          <div className="buttons">
-            <button onClick={adoptPet}>Yes</button>
-            <button onClick={() => setModalStatus(false)}>No</button>
-          </div>
+          <>
+            <h2>Would you like to adopt {pet.name}?</h2>
+            <div className="buttons">
+              <button onClick={adoptPet}>Yes</button>
+              <button onClick={() => setModalStatus(false)}>No</button>
+            </div>
+          </>
         </Modal>
-        : ''}
+      ) : (
+        ""
+      )}
     </div>
   );
 };
 
-
-function DetailsErrorBoundary(props) {
+function DetailsErrorBoundary() {
   return (
     <ErrorBoundary>
-      <Details {...props} />
+      <Details />
     </ErrorBoundary>
   );
 }

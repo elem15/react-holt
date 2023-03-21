@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Details from "./components/Details";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SearchParams from "./components/SearchParams";
-import AdoptPetContext from './AdoptPetContext';
+import AdoptPetContext from "./AdoptPetContext";
+import { Pet } from "./types/APIResponses";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +16,7 @@ const queryClient = new QueryClient({
   },
 });
 const App = () => {
-  const adoptPet = useState();
+  const adoptPet = useState(null as Pet | null);
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
@@ -34,5 +35,6 @@ const App = () => {
 };
 
 const container = document.getElementById("root");
+if (!container) throw new Error("No root element to render");
 const root = createRoot(container);
 root.render(React.createElement(App));

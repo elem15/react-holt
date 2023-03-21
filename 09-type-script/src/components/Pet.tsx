@@ -1,7 +1,7 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { Pet as PetType } from "../types/APIResponses";
 
-const Pet = ({ name, animal, breed, images, city, state, id }) => {
+const Pet = ({ name, animal, breed, images, city, state, id }: PetType) => {
   let hero = "http://pets-images.dev-apis.com/pets/none.jpg";
   if (images.length) hero = images[0];
   return (
