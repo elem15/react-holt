@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const adoptedPetSlice = createSlice({
-  name: 'adoptedPet',
+  name: "adoptedPet",
   initialState: {
-    value: null
+    value: null,
   },
   reducers: {
     adopt: (state, action) => {
@@ -11,8 +11,8 @@ const adoptedPetSlice = createSlice({
     },
     unAdopt: (state) => {
       state.value = null;
-    }
-  }
+    },
+  },
 });
 
 export const { adopt, unAdopt } = adoptedPetSlice.actions;

@@ -23,7 +23,9 @@ class Carousel extends Component {
               alt="animal thumbnail"
               key={image}
               className={index === active ? "active" : ""}
-              onClick={() => { this.setState({ active: index }); }}
+              onClick={() => {
+                this.setState({ active: index });
+              }}
             />
           ))}
         </div>

@@ -1,23 +1,19 @@
 import { useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
-import { useQuery } from "@tanstack/react-query";
-import fetchPetsList from "../queries/fetchPetsList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "../redux/searchParamsSlice";
+import { useSearchQuery } from "../redux/petApiService";
 const animals = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = ({ counter }) => {
+  const dispatch = useDispatch();
   const [animal, setAnimal] = useState("");
-  const [petsParams, setPetParams] = useState({
-    animal: "",
-    location: "",
-    breed: "",
-  });
+  const petsParams = useSelector((state) => state.searchParams.value);
+  const { data: pets, isLoading } = useSearchQuery(petsParams);
   const [currentBreeds] = useBreeds(animal);
-  const result = useQuery(["pets", petsParams], fetchPetsList);
   const adoptedPet = useSelector((state) => state.adoptedPet.value);
-  const pets = result?.data?.pets ?? [];
-  if (result.isLoading) {
+  if (isLoading) {
     return (
       <div className="loading-pane">
         <h2 className="loader">🌀</h2>
@@ -28,11 +24,13 @@ const SearchParams = ({ counter }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    setPetParams({
-      animal: formData.get("animal") ?? "",
-      location: formData.get("location") ?? "",
-      breed: formData.get("breeds") ?? "",
-    });
+    dispatch(
+      add({
+        animal: formData.get("animal") ?? "",
+        location: formData.get("location") ?? "",
+        breed: formData.get("breeds") ?? "",
+      })
+    );
   };
   return (
     <div className="search-params">

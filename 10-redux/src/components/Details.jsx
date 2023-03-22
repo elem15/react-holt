@@ -1,34 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import fetchPet from "../queries/fetchPet";
 import { adopt } from "../redux/adoptedPetSlice";
+import { useGetPetQuery } from "../redux/petApiService";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundary";
 import Modal from "./Modal";
 
 const Details = () => {
   const { id } = useParams();
-  const result = useQuery(["details", id], fetchPet);
+  const { isLoading, data: pet } = useGetPetQuery(id);
   const [isModal, setModalStatus] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const renderModal = () => {
     setModalStatus(false);
   };
-  // these error handling don't work in this case with useQuery. Only Error boundary help!
-  if (result.isError) {
-    return <div className="error">Some loading error</div>;
-  }
-  if (result.isLoading) {
+
+  if (isLoading) {
     return (
       <div className="loading-pane">
         <h2 className="loader">🌀</h2>
       </div>
     );
   }
-  const [pet] = result.data.pets;
   const adoptPet = () => {
     dispatch(adopt(pet));
     navigate("/");
