@@ -3,12 +3,16 @@ import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
 import { useQuery } from "@tanstack/react-query";
 import fetchPetsList from "../queries/fetchPetsList";
-import AdoptPetContext from '../AdoptPetContext';
+import AdoptPetContext from "../AdoptPetContext";
 const animals = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = ({ counter }) => {
   const [animal, setAnimal] = useState("");
-  const [petsParams, setPetParams] = useState({ animal: "", location: "", breed: "" });
+  const [petsParams, setPetParams] = useState({
+    animal: "",
+    location: "",
+    breed: "",
+  });
   const [currentBreeds] = useBreeds(animal);
   const result = useQuery(["pets", petsParams], fetchPetsList);
   const [adoptedPet] = useContext(AdoptPetContext);
@@ -34,13 +38,11 @@ const SearchParams = ({ counter }) => {
     <div className="search-params">
       <div>{counter}</div>
       <form onSubmit={handleSubmit}>
-        {
-          adoptedPet ? (
-            <div className="pet image-container">
-              <img src={adoptedPet.images[0]} alt={adoptedPet.name} />
-            </div>
-          ) : null
-        }
+        {adoptedPet ? (
+          <div className="pet image-container">
+            <img src={adoptedPet.images[0]} alt={adoptedPet.name} />
+          </div>
+        ) : null}
         <label htmlFor="location">
           Location
           <input
@@ -84,7 +86,6 @@ const SearchParams = ({ counter }) => {
         <button>Submit</button>
       </form>
       <Pets pets={pets} />
-
     </div>
   );
 };
