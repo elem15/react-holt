@@ -10,7 +10,7 @@ const SearchParams = ({ counter }) => {
   const dispatch = useDispatch();
   const [animal, setAnimal] = useState("");
   const petsParams = useSelector((state) => state.searchParams.value);
-  const { data: pets, isLoading } = useSearchQuery(petsParams);
+  const { data: pets, isLoading, refetch } = useSearchQuery(petsParams);
   const [currentBreeds] = useBreeds(animal);
   const adoptedPet = useSelector((state) => state.adoptedPet.value);
   if (isLoading) {
@@ -82,6 +82,9 @@ const SearchParams = ({ counter }) => {
           </select>
         </label>
         <button>Submit</button>
+        <button onClick={refetch} className="button">
+          Refresh
+        </button>
       </form>
       <Pets pets={pets} />
     </div>

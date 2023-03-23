@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const petApi = createApi({
   reducerPath: "petApi",
+  // global configuration for the api time refetch
+  keepUnusedDataFor: 30,
   baseQuery: fetchBaseQuery({ baseUrl: "http://pets-v2.dev-apis.com" }),
   endpoints: (builder) => ({
     getPet: builder.query({
