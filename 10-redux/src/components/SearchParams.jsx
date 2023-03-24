@@ -1,45 +1,36 @@
-import {
-  useContext,
-  useDeferredValue,
-  useMemo,
-  useState,
-  useTransition,
-} from "react";
+import { useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
-import { useQuery } from "@tanstack/react-query";
-import fetchPetsList from "../queries/fetchPetsList";
-import AdoptPetContext from "../AdoptPetContext";
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "../redux/searchParamsSlice";
+import { useSearchQuery } from "../redux/petApiService";
 const animals = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = ({ counter }) => {
+  const dispatch = useDispatch();
   const [animal, setAnimal] = useState("");
-  const [petsParams, setPetParams] = useState({
-    animal: "",
-    location: "",
-    breed: "",
-  });
+  const petsParams = useSelector((state) => state.searchParams.value);
+  const { data: pets, isLoading, refetch } = useSearchQuery(petsParams);
   const [currentBreeds] = useBreeds(animal);
-  const [isPending, startTransition] = useTransition();
-  const result = useQuery(["pets", petsParams], fetchPetsList);
-  const [adoptedPet] = useContext(AdoptPetContext);
-  const pets = result?.data?.pets ?? [];
-  const deferredPets = useDeferredValue(pets);
-  const renderedPets = useMemo(
-    () => <Pets pets={deferredPets} result={result} />,
-    [deferredPets, result]
-  );
+  const adoptedPet = useSelector((state) => state.adoptedPet.value);
+  if (isLoading) {
+    return (
+      <div className="loading-pane">
+        <h2 className="loader">🌀</h2>
+      </div>
+    );
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    startTransition(() => {
-      setPetParams({
+    dispatch(
+      add({
         animal: formData.get("animal") ?? "",
         location: formData.get("location") ?? "",
         breed: formData.get("breeds") ?? "",
-      });
-    });
+      })
+    );
   };
   return (
     <div className="search-params">
@@ -90,15 +81,12 @@ const SearchParams = ({ counter }) => {
             ))}
           </select>
         </label>
-        {isPending ? (
-          <div className="mini loading-pane">
-            <h2 className="loader">🌀</h2>
-          </div>
-        ) : (
-          <button>Submit</button>
-        )}
+        <button>Submit</button>
+        <button onClick={refetch} className="button">
+          Refresh
+        </button>
       </form>
-      {renderedPets}
+      <Pets pets={pets} />
     </div>
   );
 };

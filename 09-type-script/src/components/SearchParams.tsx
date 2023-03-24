@@ -1,49 +1,42 @@
-import {
-  useContext,
-  useDeferredValue,
-  useMemo,
-  useState,
-  useTransition,
-} from "react";
+import { FormEvent, useContext, useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
 import { useQuery } from "@tanstack/react-query";
 import fetchPetsList from "../queries/fetchPetsList";
 import AdoptPetContext from "../AdoptPetContext";
-const animals = ["cat", "dog", "bird", "reptile", "pig"];
+import { Animal } from "../types/APIResponses";
+const ANIMALS: Animal[] = ["cat", "dog", "bird", "reptile", "pig"];
 
-const SearchParams = ({ counter }) => {
-  const [animal, setAnimal] = useState("");
+const SearchParams = () => {
+  const [animal, setAnimal] = useState("" as Animal);
   const [petsParams, setPetParams] = useState({
     animal: "",
     location: "",
     breed: "",
   });
   const [currentBreeds] = useBreeds(animal);
-  const [isPending, startTransition] = useTransition();
   const result = useQuery(["pets", petsParams], fetchPetsList);
   const [adoptedPet] = useContext(AdoptPetContext);
   const pets = result?.data?.pets ?? [];
-  const deferredPets = useDeferredValue(pets);
-  const renderedPets = useMemo(
-    () => <Pets pets={deferredPets} result={result} />,
-    [deferredPets, result]
-  );
+  if (result.isLoading) {
+    return (
+      <div className="loading-pane">
+        <h2 className="loader">🌀</h2>
+      </div>
+    );
+  }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    startTransition(() => {
-      setPetParams({
-        animal: formData.get("animal") ?? "",
-        location: formData.get("location") ?? "",
-        breed: formData.get("breeds") ?? "",
-      });
+    const formData = new FormData(e.currentTarget);
+    setPetParams({
+      animal: formData.get("animal")?.toString() ?? "",
+      location: formData.get("location")?.toString() ?? "",
+      breed: formData.get("breeds")?.toString() ?? "",
     });
   };
   return (
     <div className="search-params">
-      <div>{counter}</div>
       <form onSubmit={handleSubmit}>
         {adoptedPet ? (
           <div className="pet image-container">
@@ -64,16 +57,14 @@ const SearchParams = ({ counter }) => {
           <select
             name="animal"
             value={animal}
-            onChange={(e) => {
-              setAnimal(e.target.value);
-            }}
-            onBlur={(e) => {
-              setAnimal(e.target.value);
+            onChange={(e: FormEvent<HTMLSelectElement>) => {
+              const value = e.currentTarget.value as Animal;
+              setAnimal(value);
             }}
           >
             <option value=""></option>
-            {animals.map((animal) => (
-              <option name={animal} key={animal}>
+            {ANIMALS.map((animal) => (
+              <option value={animal} key={animal}>
                 {animal}
               </option>
             ))}
@@ -84,21 +75,15 @@ const SearchParams = ({ counter }) => {
           <select name="breeds" disabled={!currentBreeds.length}>
             <option></option>
             {currentBreeds.map((breed) => (
-              <option name={breed} key={breed}>
+              <option value={breed} key={breed}>
                 {breed}
               </option>
             ))}
           </select>
         </label>
-        {isPending ? (
-          <div className="mini loading-pane">
-            <h2 className="loader">🌀</h2>
-          </div>
-        ) : (
-          <button>Submit</button>
-        )}
+        <button>Submit</button>
       </form>
-      {renderedPets}
+      <Pets pets={pets} />
     </div>
   );
 };

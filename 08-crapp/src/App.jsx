@@ -1,10 +1,9 @@
-import React, { lazy, Suspense, useContext, useState } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import React, { lazy, Suspense, useState } from "react";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AdoptPetContext from "./AdoptPetContext";
-const Details = lazy(() => import("./components/Details"));
 import SearchParams from "./components/SearchParams";
+const Details = lazy(() => import("./components/Details"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,6 +40,4 @@ const App = () => {
   );
 };
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(React.createElement(App));
+export default App

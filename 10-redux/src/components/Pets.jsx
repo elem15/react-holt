@@ -1,13 +1,6 @@
 import Pet from "./Pet";
 
-const Pets = ({ pets, result }) => {
-  if (result.isLoading) {
-    return (
-      <div className="loading-pane">
-        <h2 className="loader">🌀</h2>
-      </div>
-    );
-  }
+const Pets = ({ pets }) => {
   return (
     <div className="search">
       {!pets.length ? (
