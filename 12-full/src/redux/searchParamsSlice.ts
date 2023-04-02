@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-type SearchParams = {
-  animal: string;
-  location: string;
-  breed: string;
-};
+import { SearchParams } from "../types/APIResponses";
+
 const initialState = {
   value: {
     animal: "",

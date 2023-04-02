@@ -1,13 +1,12 @@
 import { FormEvent, useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
-import { useQuery } from "@tanstack/react-query";
-import fetchPetsList from "../queries/fetchPetsList";
 import { Animal } from "../types/APIResponses";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useDispatch } from "react-redux";
 import { add } from "../redux/searchParamsSlice";
+import { useSearchQuery } from "../redux/petApiService";
 
 const ANIMALS: Animal[] = ["cat", "dog", "bird", "reptile", "pig"];
 
@@ -19,10 +18,10 @@ const SearchParams = () => {
   const dispatch = useDispatch();
 
   const [currentBreeds] = useBreeds(animal);
-  const result = useQuery(["pets", petsParams], fetchPetsList);
+  const { data, isLoading } = useSearchQuery(petsParams);
+  const pets = data ? data : [];
   const adoptedPet = useSelector((state: RootState) => state.adoptedPet.value);
-  const pets = result?.data?.pets ?? [];
-  if (result.isLoading) {
+  if (isLoading) {
     return (
       <div className="loading-pane">
         <h2 className="loader">🌀</h2>

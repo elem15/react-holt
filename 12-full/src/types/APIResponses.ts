@@ -22,3 +22,8 @@ export interface BreedListAPIResponse {
   animal: Animal;
   breeds: string[];
 }
+export type SearchParams = {
+  animal: string;
+  location: string;
+  breed: string;
+};
