@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import AdoptPetContext from "../AdoptPetContext";
 import fetchPet from "../queries/fetchPet";
+import { adopt } from "../redux/adoptedPetSlice";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundary";
 import Modal from "./Modal";
@@ -12,11 +13,11 @@ const Details = () => {
   if (!id) throw new Error("No id available");
   const result = useQuery(["details", id], fetchPet);
   const [isModal, setModalStatus] = useState(false);
-  const [, setAdoptPet] = useContext(AdoptPetContext);
   const navigate = useNavigate();
   const renderModal = () => {
     setModalStatus(false);
   };
+  const dispatch = useDispatch();
   // these error handling don't work in this case with useQuery. Only Error boundary help!
   if (result.isError) {
     return <div className="error">Some loading error</div>;
@@ -30,7 +31,7 @@ const Details = () => {
   }
   const pet = result.data.pets[0];
   const adoptPet = () => {
-    setAdoptPet(pet);
+    dispatch(adopt(pet));
     navigate("/");
   };
   return (

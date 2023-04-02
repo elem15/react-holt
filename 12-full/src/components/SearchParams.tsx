@@ -1,22 +1,26 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 import Pets from "./Pets";
 import useBreeds from "../hooks/useBreeds";
 import { useQuery } from "@tanstack/react-query";
 import fetchPetsList from "../queries/fetchPetsList";
-import AdoptPetContext from "../AdoptPetContext";
 import { Animal } from "../types/APIResponses";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { useDispatch } from "react-redux";
+import { add } from "../redux/searchParamsSlice";
+
 const ANIMALS: Animal[] = ["cat", "dog", "bird", "reptile", "pig"];
 
 const SearchParams = () => {
   const [animal, setAnimal] = useState("" as Animal);
-  const [petsParams, setPetParams] = useState({
-    animal: "",
-    location: "",
-    breed: "",
-  });
+  const petsParams = useSelector(
+    (state: RootState) => state.searchParams.value
+  );
+  const dispatch = useDispatch();
+
   const [currentBreeds] = useBreeds(animal);
   const result = useQuery(["pets", petsParams], fetchPetsList);
-  const [adoptedPet] = useContext(AdoptPetContext);
+  const adoptedPet = useSelector((state: RootState) => state.adoptedPet.value);
   const pets = result?.data?.pets ?? [];
   if (result.isLoading) {
     return (
@@ -29,11 +33,13 @@ const SearchParams = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    setPetParams({
-      animal: formData.get("animal")?.toString() ?? "",
-      location: formData.get("location")?.toString() ?? "",
-      breed: formData.get("breeds")?.toString() ?? "",
-    });
+    dispatch(
+      add({
+        animal: formData.get("animal")?.toString() ?? "",
+        location: formData.get("location")?.toString() ?? "",
+        breed: formData.get("breeds")?.toString() ?? "",
+      })
+    );
   };
   return (
     <div className="search-params">
